@@ -35,4 +35,4 @@ app.use(
 
 const port = process.env.PORT || 3000
 server.listen(port)
-console.warn('processId:' + process.pid.toString() + ' App Running on port: ' + port)
+console.warn('processId:' + process.pid.toString() + ' - App Running on port: ' + port.toString())
