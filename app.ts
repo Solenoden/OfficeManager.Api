@@ -4,6 +4,9 @@ import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import http from 'http'
+import { EndpointControllerInterface } from './interfaces/endpoint-controller.interface'
+import { OfficeController } from './controllers/office.controller'
+import { DatabaseService } from './services/database.service'
 
 const app = express()
 const server = http.createServer(app)
@@ -32,6 +35,12 @@ app.use(
         limit: '5mb',
     }),
 )
+
+DatabaseService.getInstance()
+const endpointControllers: EndpointControllerInterface[] = [
+    new OfficeController()
+]
+endpointControllers.forEach(controller => controller.registerEndpoints(app))
 
 const port = process.env.PORT || 3000
 server.listen(port)
