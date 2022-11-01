@@ -9,7 +9,7 @@ export class DatabaseService {
 
     private constructor() {
         this.connectToDatabase().then(() => {
-            void this.initializeDatabase()
+            return this.initializeDatabase()
         }).catch(error => {
             // eslint-disable-next-line no-console
             console.error(new DatabaseError(error, this.constructor.name))
@@ -17,7 +17,7 @@ export class DatabaseService {
     }
 
     public static getInstance(): DatabaseService {
-        if (DatabaseService.instance) {
+        if (!DatabaseService.instance) {
             DatabaseService.instance = new DatabaseService()
         }
 
@@ -26,16 +26,39 @@ export class DatabaseService {
 
     private async connectToDatabase(): Promise<void> {
         this.dbClient = new Client({
-            user: 'postgres',
             host: 'localhost',
+            user: 'postgres',
             password: 'postgres',
+            database: 'officemanagerdb',
             port: 5432
         })
         await this.dbClient.connect()
+        // eslint-disable-next-line no-console
+        console.log('DatabaseService: Successfully connected to database')
     }
 
     private async initializeDatabase(): Promise<void> {
-        await this.dbClient.query(`CREATE TABLE IF NOT EXISTS ${DatabaseTable.Office}`)
-        await this.dbClient.query(`CREATE TABLE IF NOT EXISTS ${DatabaseTable.OfficeWorker}`)
+        const sql = `
+           CREATE TABLE IF NOT EXISTS ${DatabaseTable.Office} (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(50) NOT NULL, 
+                address VARCHAR(120) NOT NULL, 
+                phone_number VARCHAR(10) NOT NULL, 
+                maximum_capacity INTEGER NOT NULL, 
+                colour VARCHAR(10) NOT NULL
+            )`
+        await this.query(sql)
+        // eslint-disable-next-line no-console
+        console.log('Database Service: Successfully initialized database')
+    }
+
+    public async query(sqlQuery: string): Promise<any[]> {
+        const result = await this.dbClient.query(sqlQuery)
+        if (result?.command?.toUpperCase() === 'SELECT') {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return result.rows
+        }
+
+        return null
     }
 }
