@@ -72,6 +72,79 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "OfficeMemberGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/office-member?officeId=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"office-member"
+					],
+					"query": [
+						{
+							"key": "officeId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OfficeMemberCreate",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"officeId\": 1,\r\n    \"firstName\": \"Piet\",\r\n    \"lastName\": \"Plankies\",\r\n    \"avatarId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/office-member",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"office-member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OfficeMemberDelete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/office-member/:officeMemberId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"office-member",
+						":officeMemberId"
+					],
+					"variable": [
+						{
+							"key": "officeMemberId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
