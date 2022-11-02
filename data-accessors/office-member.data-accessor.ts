@@ -6,6 +6,11 @@ export class OfficeMemberDataAccessor {
     private databaseService: DatabaseService = DatabaseService.getInstance()
     private databaseTable = DatabaseTable.OfficeMember
 
+    public async getAllOfficeMembers(): Promise<OfficeMember[]> {
+        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable}`)
+        return offices.map(x => new OfficeMember(x as Record<string, unknown>))
+    }
+
     public async getOfficeMembers(officeId: number): Promise<OfficeMember[]> {
         const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable} WHERE office_id = ${officeId}`)
         return offices.map(x => new OfficeMember(x as Record<string, unknown>))
