@@ -38,7 +38,8 @@ export class DatabaseService {
     }
 
     private async initializeDatabase(): Promise<void> {
-        const sql = `
+        const promises: Promise<any>[] = []
+        promises.push(this.query(`
            CREATE TABLE IF NOT EXISTS ${DatabaseTable.Office} (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(50) NOT NULL, 
@@ -47,8 +48,19 @@ export class DatabaseService {
                 email_address VARCHAR(70) NOT NULL, 
                 maximum_capacity INTEGER NOT NULL, 
                 colour VARCHAR(10) NOT NULL
-            )`
-        await this.query(sql)
+           )
+        `))
+        promises.push(this.query(`
+            CREATE TABLE IF NOT EXISTS ${DatabaseTable.OfficeMember} (
+                id SERIAL PRIMARY KEY,
+                office_id INTEGER REFERENCES ${DatabaseTable.Office} (id) NOT NULL,
+                first_name VARCHAR(50) NOT NULL,
+                last_name VARCHAR(50) NOT NULL,
+                avatar_id INTEGER NOT NULL
+            )
+        `))
+        await Promise.all(promises)
+
         // eslint-disable-next-line no-console
         console.log('Database Service: Successfully initialized database')
     }

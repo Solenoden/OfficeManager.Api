@@ -1,4 +1,4 @@
 export enum DatabaseTable {
     Office = 'office',
-    OfficeWorker = 'officeWorker'
+    OfficeMember = 'office_member'
 }

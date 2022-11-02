@@ -7,6 +7,7 @@ import http from 'http'
 import { EndpointControllerInterface } from './interfaces/endpoint-controller.interface'
 import { OfficeController } from './controllers/office.controller'
 import { DatabaseService } from './services/database.service'
+import { OfficeMemberController } from './controllers/office-member.controller'
 
 const app = express()
 const server = http.createServer(app)
@@ -38,7 +39,8 @@ app.use(
 
 DatabaseService.getInstance()
 const endpointControllers: EndpointControllerInterface[] = [
-    new OfficeController()
+    new OfficeController(),
+    new OfficeMemberController()
 ]
 endpointControllers.forEach(controller => controller.registerEndpoints(app))
 
