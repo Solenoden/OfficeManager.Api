@@ -44,6 +44,7 @@ export class DatabaseService {
                 name VARCHAR(50) NOT NULL, 
                 address VARCHAR(120) NOT NULL, 
                 phone_number VARCHAR(10) NOT NULL, 
+                email_address VARCHAR(70) NOT NULL, 
                 maximum_capacity INTEGER NOT NULL, 
                 colour VARCHAR(10) NOT NULL
             )`

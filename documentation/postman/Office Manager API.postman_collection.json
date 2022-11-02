@@ -30,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Century City Office\",\r\n    \"address\": \"123 Road, Century City, Cape Town\",\r\n    \"phoneNumber\": \"0213456789\",\r\n    \"maximumCapacity\": 10,\r\n    \"colour\": \"gold\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Durbanville Office\",\r\n    \"address\": \"123 Road, Durbanville, Cape Town\",\r\n    \"phoneNumber\": \"0213456789\",\r\n    \"emailAddress\": \"gmail@email.com\",\r\n    \"maximumCapacity\": 15,\r\n    \"colour\": \"green\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

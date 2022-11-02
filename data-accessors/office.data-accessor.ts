@@ -6,17 +6,19 @@ export class OfficeDataAccessor {
     private databaseService: DatabaseService = DatabaseService.getInstance()
     private databaseTable = DatabaseTable.Office
 
-    public getAllOffices(): Promise<any[]> {
-        return this.databaseService.query(`SELECT * FROM ${this.databaseTable}`)
+    public async getAllOffices(): Promise<Office[]> {
+        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable}`)
+        return offices.map(x => new Office(x as Record<string, unknown>))
     }
 
-    public createOffice(office: Office): Promise<any[]> {
+    public createOffice(office: Office): Promise<any> {
         const sqlQuery = `
-                INSERT INTO ${this.databaseTable} (name, address, phone_number, maximum_capacity, colour) 
+                INSERT INTO ${this.databaseTable} (name, address, phone_number, email_address, maximum_capacity, colour) 
                 VALUES (
                     '${office.name}', 
                     '${office.address}', 
                     '${office.phoneNumber}', 
+                    '${office.emailAddress}', 
                     ${office.maximumCapacity}, 
                     '${office.colour}'
                 )`
