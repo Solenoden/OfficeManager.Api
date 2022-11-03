@@ -41,6 +41,9 @@ export class OfficeService {
         } catch (error) {
             throw new UnexpectedError(error, this.constructor.name + '.deleteOffice()')
         }
+    }
 
+    public async updateOffice(officeId: number, office: Office): Promise<void> {
+        return this.officeDataAccessor.updateOffice(officeId, office)
     }
 }

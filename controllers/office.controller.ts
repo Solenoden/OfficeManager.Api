@@ -11,6 +11,7 @@ export class OfficeController implements EndpointControllerInterface {
     registerEndpoints(app: Express): void {
         app.get('/api/v1/office', this.getAllOffices.bind(this) as RequestHandler)
         app.put('/api/v1/office', this.createOffice.bind(this) as RequestHandler)
+        app.patch('/api/v1/office/:officeId', this.updateOffice.bind(this) as RequestHandler)
         app.delete('/api/v1/office/:officeId', this.deleteOffice.bind(this) as RequestHandler)
     }
 
@@ -27,6 +28,17 @@ export class OfficeController implements EndpointControllerInterface {
         try {
             const officeToCreate = new Office(request.body as { [key: string]: any })
             const result = await this.officeService.createOffice(officeToCreate)
+            response.send(result)
+        } catch (error) {
+            this.errorHandlerService.handleError(response, error)
+        }
+    }
+
+    private async updateOffice(request: Request, response: Response): Promise<void> {
+        try {
+            const officeId = Number(request.params.officeId)
+            const officeData = new Office(request.body as { [key: string]: any })
+            const result = await this.officeService.updateOffice(officeId, officeData)
             response.send(result)
         } catch (error) {
             this.errorHandlerService.handleError(response, error)
