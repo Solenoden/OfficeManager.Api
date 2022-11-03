@@ -7,7 +7,7 @@ export class OfficeDataAccessor {
     private databaseTable = DatabaseTable.Office
 
     public async getAllOffices(): Promise<Office[]> {
-        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable}`)
+        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable} ORDER BY id`)
         return offices.map(x => new Office(x as Record<string, unknown>))
     }
 
@@ -22,6 +22,21 @@ export class OfficeDataAccessor {
                     ${office.maximumCapacity}, 
                     '${office.colour}'
                 )`
+
+        await this.databaseService.query(sqlQuery)
+    }
+
+    public async updateOffice(officeId: number, office: Office): Promise<void> {
+        const sqlQuery = `
+            UPDATE ${this.databaseTable} SET
+                name = '${office.name}',
+                address = '${office.address}',
+                phone_number = '${office.phoneNumber}',
+                email_address = '${office.emailAddress}',
+                maximum_capacity = ${office.maximumCapacity},
+                colour = '${office.colour}'
+            WHERE id = ${officeId}
+        `
 
         await this.databaseService.query(sqlQuery)
     }
