@@ -11,6 +11,7 @@ export class OfficeMemberController implements EndpointControllerInterface {
     registerEndpoints(app: Express): void {
         app.get('/api/v1/office-member', this.getOfficeMembers.bind(this) as RequestHandler)
         app.put('/api/v1/office-member', this.createOfficeMember.bind(this) as RequestHandler)
+        app.patch('/api/v1/office-member/:officeMemberId', this.updateOfficeMember.bind(this) as RequestHandler)
         app.delete('/api/v1/office-member/:officeMemberId', this.deleteOfficeMember.bind(this) as RequestHandler)
     }
 
@@ -28,6 +29,17 @@ export class OfficeMemberController implements EndpointControllerInterface {
         try {
             const officeMemberToCreate = new OfficeMember(request.body as { [key: string]: any })
             const result = await this.officeMemberService.createOfficeMember(officeMemberToCreate)
+            response.send(result)
+        } catch (error) {
+            this.errorHandlerService.handleError(response, error)
+        }
+    }
+
+    private async updateOfficeMember(request: Request, response: Response): Promise<void> {
+        try {
+            const officeMemberId = Number(request.params.officeMemberId)
+            const officeMemberData = new OfficeMember(request.body as { [key: string]: any })
+            const result = await this.officeMemberService.updateOfficeMember(officeMemberId, officeMemberData)
             response.send(result)
         } catch (error) {
             this.errorHandlerService.handleError(response, error)

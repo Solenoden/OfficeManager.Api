@@ -12,19 +12,38 @@ export class OfficeMemberDataAccessor {
     }
 
     public async getOfficeMembers(officeId: number): Promise<OfficeMember[]> {
-        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable} WHERE office_id = ${officeId}`)
+        const sqlQuery = `
+            SELECT * FROM ${this.databaseTable} 
+            WHERE office_id = ${officeId}
+            ORDER BY first_name, last_name
+        `
+
+        const offices = await this.databaseService.query(sqlQuery)
         return offices.map(x => new OfficeMember(x as Record<string, unknown>))
     }
 
-    public async createOfficeMember(office: OfficeMember): Promise<void> {
+    public async createOfficeMember(officeMember: OfficeMember): Promise<void> {
         const sqlQuery = `
                 INSERT INTO ${this.databaseTable} (office_id, first_name, last_name, avatar_id) 
                 VALUES (
-                    '${office.officeId}', 
-                    '${office.firstName}', 
-                    '${office.lastName}', 
-                    '${office.avatarId}'
+                    '${officeMember.officeId}', 
+                    '${officeMember.firstName}', 
+                    '${officeMember.lastName}', 
+                    '${officeMember.avatarId}'
                 )`
+
+        await this.databaseService.query(sqlQuery)
+    }
+
+    public async updateOfficeMember(officeMemberId: number, officeMember: OfficeMember): Promise<void> {
+        const sqlQuery = `
+            UPDATE ${this.databaseTable} SET
+                office_id = '${officeMember.officeId}',
+                first_name = '${officeMember.firstName}',
+                last_name = '${officeMember.lastName}',
+                avatar_id = '${officeMember.avatarId}'
+            WHERE id = ${officeMemberId}
+        `
 
         await this.databaseService.query(sqlQuery)
     }

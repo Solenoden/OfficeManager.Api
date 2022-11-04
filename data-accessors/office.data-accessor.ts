@@ -7,7 +7,7 @@ export class OfficeDataAccessor {
     private databaseTable = DatabaseTable.Office
 
     public async getAllOffices(): Promise<Office[]> {
-        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable} ORDER BY id`)
+        const offices = await this.databaseService.query(`SELECT * FROM ${this.databaseTable} ORDER BY name`)
         return offices.map(x => new Office(x as Record<string, unknown>))
     }
 
