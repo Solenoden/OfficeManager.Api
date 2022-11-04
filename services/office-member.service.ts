@@ -17,6 +17,10 @@ export class OfficeMemberService {
         return this.officeMemberDataAccessor.createOfficeMember(officeMember)
     }
 
+    public async updateOfficeMember(officeMemberId: number, officeMember: OfficeMember): Promise<void> {
+        return this.officeMemberDataAccessor.updateOfficeMember(officeMemberId, officeMember)
+    }
+
     public async deleteOfficeMember(officeMemberId: number): Promise<void> {
         return this.officeMemberDataAccessor.deleteOfficeMember(officeMemberId)
     }
