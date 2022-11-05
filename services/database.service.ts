@@ -35,8 +35,9 @@ export class DatabaseService {
             console.log('DatabaseService: Successfully connected to database')
         } catch (error) {
             if (retryCount < maxRetries) {
-                setTimeout(() => {
-                    void this.connectToDatabase(++retryCount)
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setTimeout(async () => {
+                    await this.connectToDatabase(++retryCount)
                 }, retryIntervalMilliseconds)
             }
             // eslint-disable-next-line no-console
