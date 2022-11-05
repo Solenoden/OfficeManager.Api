@@ -8,9 +8,7 @@ export class DatabaseService {
     private dbClient: Client
 
     private constructor() {
-        this.connectToDatabase().then(() => {
-            return this.initializeDatabase()
-        }).catch(error => {
+        this.connectToDatabase().catch(error => {
             // eslint-disable-next-line no-console
             console.error(new DatabaseError(error, this.constructor.name))
         })
@@ -24,17 +22,25 @@ export class DatabaseService {
         return DatabaseService.instance
     }
 
-    private async connectToDatabase(): Promise<void> {
-        this.dbClient = new Client({
-            host: 'localhost',
-            user: 'postgres',
-            password: 'postgres',
-            database: 'officemanagerdb',
-            port: 5432
-        })
-        await this.dbClient.connect()
-        // eslint-disable-next-line no-console
-        console.log('DatabaseService: Successfully connected to database')
+    private async connectToDatabase(retryCount = 0): Promise<void> {
+        const maxRetries = 3
+        const retryIntervalMilliseconds = 3000
+
+        try {
+            this.dbClient = new Client()
+            await this.dbClient.connect()
+            // eslint-disable-next-line no-console
+            console.log('DatabaseService: Successfully connected to database')
+        } catch (error) {
+            if (retryCount < maxRetries) {
+                setTimeout(() => {void this.connectToDatabase(++retryCount)}, retryIntervalMilliseconds)
+                return
+            }
+            // eslint-disable-next-line no-console
+            console.error('Error while connecting to database: ', error)
+        }
+
+        await this.initializeDatabase()
     }
 
     private async initializeDatabase(): Promise<void> {
