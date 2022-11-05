@@ -25,8 +25,9 @@ export class DatabaseService {
     }
 
     private async connectToDatabase(): Promise<void> {
+        // TODO: Move to environment variables
         this.dbClient = new Client({
-            host: 'localhost',
+            host: 'postgres',
             user: 'postgres',
             password: 'postgres',
             database: 'officemanagerdb',

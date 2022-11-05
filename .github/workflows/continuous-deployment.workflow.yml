@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - fix/pipeline
 
 env:
   NODE_VERSION: 12.20.1
