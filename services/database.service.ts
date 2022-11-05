@@ -8,9 +8,7 @@ export class DatabaseService {
     private dbClient: Client
 
     private constructor() {
-        this.connectToDatabase().then(() => {
-            return this.initializeDatabase()
-        }).catch(error => {
+        this.connectToDatabase().catch(error => {
             // eslint-disable-next-line no-console
             console.error(new DatabaseError(error, this.constructor.name))
         })
@@ -35,14 +33,14 @@ export class DatabaseService {
             console.log('DatabaseService: Successfully connected to database')
         } catch (error) {
             if (retryCount < maxRetries) {
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setTimeout(async () => {
-                    await this.connectToDatabase(++retryCount)
-                }, retryIntervalMilliseconds)
+                setTimeout(() => {void this.connectToDatabase(++retryCount)}, retryIntervalMilliseconds)
+                return
             }
             // eslint-disable-next-line no-console
             console.error('Error while connecting to database: ', error)
         }
+
+        await this.initializeDatabase()
     }
 
     private async initializeDatabase(): Promise<void> {
