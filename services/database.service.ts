@@ -24,11 +24,24 @@ export class DatabaseService {
         return DatabaseService.instance
     }
 
-    private async connectToDatabase(): Promise<void> {
-        this.dbClient = new Client()
-        await this.dbClient.connect()
-        // eslint-disable-next-line no-console
-        console.log('DatabaseService: Successfully connected to database')
+    private async connectToDatabase(retryCount = 0): Promise<void> {
+        const maxRetries = 3
+        const retryIntervalMilliseconds = 3000
+
+        try {
+            this.dbClient = new Client()
+            await this.dbClient.connect()
+            // eslint-disable-next-line no-console
+            console.log('DatabaseService: Successfully connected to database')
+        } catch (error) {
+            if (retryCount < maxRetries) {
+                setTimeout(() => {
+                    void this.connectToDatabase(++retryCount)
+                }, retryIntervalMilliseconds)
+            }
+            // eslint-disable-next-line no-console
+            console.error('Error while connecting to database: ', error)
+        }
     }
 
     private async initializeDatabase(): Promise<void> {
