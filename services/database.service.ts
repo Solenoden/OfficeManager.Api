@@ -25,14 +25,7 @@ export class DatabaseService {
     }
 
     private async connectToDatabase(): Promise<void> {
-        // TODO: Move to environment variables
-        this.dbClient = new Client({
-            host: 'postgres',
-            user: 'postgres',
-            password: 'postgres',
-            database: 'officemanagerdb',
-            port: 5432
-        })
+        this.dbClient = new Client()
         await this.dbClient.connect()
         // eslint-disable-next-line no-console
         console.log('DatabaseService: Successfully connected to database')
